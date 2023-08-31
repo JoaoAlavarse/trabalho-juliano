@@ -53,11 +53,13 @@ public class ContaService{
     public PessoaFisica verificarPessoaFisica() throws IOException{
         System.out.println("Entre com o cpf");
         String cpf = reader.readLine();
-        if(!pessoaFisicaService.hashPf.containsKey(cpf)){
+        if(pessoaFisicaService.hashPf.containsKey(cpf) == true){
+            return pessoaFisicaService.obterPorCpf(cpf);
+        } else{
             System.out.println("Cpf nao cadastrado");
-            verificarPessoaFisica();
+            return verificarPessoaFisica();
         }
-        return pessoaFisicaService.obterPorCpf(cpf);
+       
     }
 
 

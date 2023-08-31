@@ -15,6 +15,7 @@ public class PessoaFisicaService {
         String nome = reader.readLine();
 
         hashPf.put(cpf, new PessoaFisica(nome,  cpf));
+        
     }
 
     public PessoaFisica obterPorCpf(String cpf){
