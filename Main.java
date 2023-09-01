@@ -1,12 +1,10 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Hashtable;
 
 public class Main {
 
     private static PessoaFisicaService pessoaFisicaService = new PessoaFisicaService();
-    private static ContaService contaService = new ContaService();
+    private static ContaService contaService = new ContaService(pessoaFisicaService);
     private static  BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     public static void main(String[] args) throws Exception {
         int opcaoMenu;
@@ -43,7 +41,7 @@ public class Main {
                 break;
 
                 case 4:
-
+                
                 break;
 
                 case 5:

@@ -1,12 +1,16 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 public class ContaService{
     private PessoaFisicaService pessoaFisicaService = new PessoaFisicaService();
-    private Hashtable<String, AbstractConta> hashConta = new Hashtable<String, AbstractConta>();
+    private HashMap<String, AbstractConta> hashConta = new HashMap<String, AbstractConta>();
     private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    
+    public ContaService(PessoaFisicaService pessoaFisicaService) {
+        this.pessoaFisicaService = pessoaFisicaService;
+    }
 
     public void cadastrarConta(AbstractConta conta) throws Exception{
         hashConta.put(conta.getCpf(), conta);
@@ -17,7 +21,6 @@ public class ContaService{
         Integer senha = verificarSenha();
         PessoaFisica pessoaFisica = verificarPessoaFisica();
         cadastrarConta(new ContaCorrente(agencia, senha, pessoaFisica));
-
     }
 
     public void cadastrarContaPoupanca() throws Exception{
@@ -35,10 +38,10 @@ public class ContaService{
     }
 
 
-    public Integer verificarSenha() throws Exception{
+    private Integer verificarSenha() throws Exception{
         System.out.println("Entre com a sua senha de 4 digitos");
         String teste = reader.readLine();
-        if (!teste.matches("[0-9]+") && teste.length() != 4){
+        if (!teste.matches("[0-9]+") || teste.length() != 4){
             System.out.println("Senha com parametros invalidos");
             verificarSenha();
             return 0;
@@ -50,7 +53,7 @@ public class ContaService{
 
     }
 
-    public PessoaFisica verificarPessoaFisica() throws IOException{
+    private PessoaFisica verificarPessoaFisica() throws IOException{
         System.out.println("Entre com o cpf");
         String cpf = reader.readLine();
         if(pessoaFisicaService.hashPf.containsKey(cpf) == true){
@@ -61,6 +64,7 @@ public class ContaService{
         }
        
     }
+
 
 
 }

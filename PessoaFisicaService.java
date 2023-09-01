@@ -1,10 +1,10 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 public class PessoaFisicaService {
-    protected Hashtable <String, PessoaFisica> hashPf = new Hashtable<String, PessoaFisica>();
+    protected HashMap <String, PessoaFisica> hashPf = new HashMap<String, PessoaFisica>();
     private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
 
@@ -15,6 +15,7 @@ public class PessoaFisicaService {
         String nome = reader.readLine();
 
         hashPf.put(cpf, new PessoaFisica(nome,  cpf));
+        System.out.println(hashPf.get(cpf));
         
     }
 
