@@ -49,7 +49,7 @@ public class Main {
                 break;
 
                 case 6:
-
+                    contaService.efetuarTransferencia();
                 break;
 
                 case 7:

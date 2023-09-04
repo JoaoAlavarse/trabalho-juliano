@@ -16,9 +16,5 @@ public class PessoaFisica {
         return cpf;
     }
 
-    
-    
-
-
 
 }

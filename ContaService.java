@@ -213,7 +213,7 @@ public class ContaService{
         AbstractConta contaOrigem = verificarContaOrigem();
         int valor = getValorTransacao();
         if (contaOrigem.getSenha() == Integer.parseInt(reader.readLine())){
-            if(conta.saldo - valor < 0){
+            if(!verificarSaldo(conta, valor)){
                 System.out.println("Saque nao pode ser concluido. Saldo insuficiente");
             } else {
                 conta.saldo = conta.saldo - valor;
@@ -228,7 +228,7 @@ public class ContaService{
         AbstractConta contaOrigem = verificarContaOrigem();
         int valor = getValorTransacao();
         if (contaOrigem.getSenha() == Integer.parseInt(reader.readLine())){
-            if(conta.saldo - valor < 0){
+            if(!verificarSaldo(conta, valor)){
                 System.out.println("Saque nao pode ser concluido. Saldo insuficiente");
             } else {
                 conta.saldo = conta.saldo - valor;
@@ -237,10 +237,121 @@ public class ContaService{
         }
     }
 
-    
+    private Boolean verificarSaldo(AbstractConta conta, int valor){
+        if (conta.saldo - valor < 0){
+            return false;
+        } else{
+            return true;
+        }
+    }
 
+    public void efetuarTransferencia() throws IOException{
+        System.out.println("Escolha a transferencia desejada");
+        System.out.println("1 - Poupanca para Poupanca");
+        System.out.println("2 - Poupanca para Corrente");
+        System.out.println("3 - Corrente para Poupanca");
+        System.out.println("4 - Corrente para Corrente");
+        int opcao = Integer.parseInt(reader.readLine());
+        switch (opcao){
+            case 1:
+                efetuarTransferenciaPoupancaParaPoupanca();
+            break;
+
+            case 2:
+                efetuarTransferenciaPoupancaParaCorrente();
+            break;
+
+            case 3:
+                efetuarTransferenciaCorrenteParaPoupanca();
+            break;
+
+            case 4:
+                efetuarTransferenciaCorrenteParaCorrente();
+            break;
+
+            default:
+                System.out.println("Opcao invalida");
+                efetuarTransferencia();
+            break;
+        }
+
+    }
     
-    
+    private void efetuarTransferenciaPoupancaParaPoupanca() throws IOException{
+        getAgencia();
+        AbstractConta contaOrigem = verificarContaOrigem();
+        AbstractConta conta = verificarContaPoupanca();
+        getAgencia();
+        int valor = getValorTransacao();
+        if (contaOrigem.getSenha() == Integer.parseInt(reader.readLine())){
+            if (!verificarSaldo(contaOrigem, valor)){
+                System.out.println("Transferencia nao pode ser concluido. Saldo insuficiente");
+            } else {
+                contaOrigem.saldo = conta.saldo - valor;
+                conta.saldo = conta.saldo + valor;
+                hashContaPoupanca.replace(conta.getCpf(), conta);
+                hashContaPoupanca.replace(contaOrigem.getCpf(), contaOrigem);
+            }
+        }
+
+    }
+
+    private void efetuarTransferenciaCorrenteParaPoupanca() throws IOException{
+        getAgencia();
+        AbstractConta contaOrigem = verificarContaOrigem();
+        AbstractConta conta = verificarContaPoupanca();
+        getAgencia();
+        int valor = getValorTransacao();
+        if (contaOrigem.getSenha() == Integer.parseInt(reader.readLine())){
+            if (!verificarSaldo(contaOrigem, valor)){
+                System.out.println("Transferencia nao pode ser concluido. Saldo insuficiente");
+            } else {
+                contaOrigem.saldo = conta.saldo - valor;
+                conta.saldo = conta.saldo + valor;
+                hashContaPoupanca.replace(conta.getCpf(), conta);
+                hashContaCorrente.replace(contaOrigem.getCpf(), contaOrigem);
+            }
+        }
+
+    }
+
+    private void efetuarTransferenciaPoupancaParaCorrente() throws IOException{
+        getAgencia();
+        AbstractConta contaOrigem = verificarContaOrigem();
+        AbstractConta conta = verificarContaPoupanca();
+        getAgencia();
+        int valor = getValorTransacao();
+        if (contaOrigem.getSenha() == Integer.parseInt(reader.readLine())){
+            if (!verificarSaldo(contaOrigem, valor)){
+                System.out.println("Transferencia nao pode ser concluido. Saldo insuficiente");
+            } else {
+                contaOrigem.saldo = conta.saldo - valor;
+                conta.saldo = conta.saldo + valor;
+                hashContaCorrente.replace(conta.getCpf(), conta);
+                hashContaPoupanca.replace(contaOrigem.getCpf(), contaOrigem);
+            }
+        }
+
+    }
+
+    private void efetuarTransferenciaCorrenteParaCorrente() throws IOException{
+        getAgencia();
+        AbstractConta contaOrigem = verificarContaOrigem();
+        AbstractConta conta = verificarContaPoupanca();
+        getAgencia();
+        int valor = getValorTransacao();
+        if (contaOrigem.getSenha() == Integer.parseInt(reader.readLine())){
+            if (!verificarSaldo(contaOrigem, valor)){
+                System.out.println("Transferencia nao pode ser concluido. Saldo insuficiente");
+            } else {
+                contaOrigem.saldo = conta.saldo - valor;
+                conta.saldo = conta.saldo + valor;
+                hashContaCorrente.replace(conta.getCpf(), conta);
+                hashContaCorrente.replace(contaOrigem.getCpf(), contaOrigem);
+            }
+        }
+
+    }
 
 
     
