@@ -166,8 +166,7 @@ public class ContaService{
         AbstractConta conta = verificarContaCorrente();
         AbstractConta contaOrigem = verificarContaOrigem();
         int valor = getValorTransacao();
-        System.out.println("Insira a senha");
-        if (contaOrigem.getSenha() == Integer.parseInt(reader.readLine())){
+        if (verificarSenha(contaOrigem)){
             conta.saldo = conta.saldo + valor;
             hashContaCorrente.replace(conta.getCpf(), conta);
         }
@@ -179,8 +178,7 @@ public class ContaService{
         AbstractConta conta = verificarContaPoupanca();
         AbstractConta contaOrigem = verificarContaOrigem();
         int valor = getValorTransacao();
-        System.out.println("Insira a senha");
-        if (contaOrigem.getSenha() == Integer.parseInt(reader.readLine())){
+        if (verificarSenha(contaOrigem)){
             conta.saldo = conta.saldo + valor;
             hashContaPoupanca.replace(conta.getCpf(), conta);
         }
@@ -212,7 +210,7 @@ public class ContaService{
         AbstractConta conta = verificarContaCorrente();
         AbstractConta contaOrigem = verificarContaOrigem();
         int valor = getValorTransacao();
-        if (contaOrigem.getSenha() == Integer.parseInt(reader.readLine())){
+        if (verificarSenha(contaOrigem)){
             if(!verificarSaldo(conta, valor)){
                 System.out.println("Saque nao pode ser concluido. Saldo insuficiente");
             } else {
@@ -227,7 +225,7 @@ public class ContaService{
         AbstractConta conta = verificarContaPoupanca();
         AbstractConta contaOrigem = verificarContaOrigem();
         int valor = getValorTransacao();
-        if (contaOrigem.getSenha() == Integer.parseInt(reader.readLine())){
+        if (verificarSenha(contaOrigem)){
             if(!verificarSaldo(conta, valor)){
                 System.out.println("Saque nao pode ser concluido. Saldo insuficiente");
             } else {
@@ -283,7 +281,7 @@ public class ContaService{
         AbstractConta conta = verificarContaPoupanca();
         getAgencia();
         int valor = getValorTransacao();
-        if (contaOrigem.getSenha() == Integer.parseInt(reader.readLine())){
+        if (verificarSenha(contaOrigem)){
             if (!verificarSaldo(contaOrigem, valor)){
                 System.out.println("Transferencia nao pode ser concluido. Saldo insuficiente");
             } else {
@@ -302,7 +300,7 @@ public class ContaService{
         AbstractConta conta = verificarContaPoupanca();
         getAgencia();
         int valor = getValorTransacao();
-        if (contaOrigem.getSenha() == Integer.parseInt(reader.readLine())){
+        if (verificarSenha(contaOrigem)){
             if (!verificarSaldo(contaOrigem, valor)){
                 System.out.println("Transferencia nao pode ser concluido. Saldo insuficiente");
             } else {
@@ -321,7 +319,7 @@ public class ContaService{
         AbstractConta conta = verificarContaPoupanca();
         getAgencia();
         int valor = getValorTransacao();
-        if (contaOrigem.getSenha() == Integer.parseInt(reader.readLine())){
+        if (verificarSenha(contaOrigem)){
             if (!verificarSaldo(contaOrigem, valor)){
                 System.out.println("Transferencia nao pode ser concluido. Saldo insuficiente");
             } else {
@@ -340,7 +338,7 @@ public class ContaService{
         AbstractConta conta = verificarContaPoupanca();
         getAgencia();
         int valor = getValorTransacao();
-        if (contaOrigem.getSenha() == Integer.parseInt(reader.readLine())){
+        if (verificarSenha(contaOrigem)){
             if (!verificarSaldo(contaOrigem, valor)){
                 System.out.println("Transferencia nao pode ser concluido. Saldo insuficiente");
             } else {
@@ -353,7 +351,14 @@ public class ContaService{
 
     }
 
-
+    private Boolean verificarSenha(AbstractConta conta) throws NumberFormatException, IOException{
+        System.out.println("Insira sua senha");
+        if (conta.getSenha() == Integer.parseInt(reader.readLine())){
+            return true;
+        } else {
+            return false;
+        }
+    }
     
 
 }

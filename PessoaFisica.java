@@ -12,7 +12,7 @@ public class PessoaFisica {
     
 
 
-    public String getCpf() {
+    protected String getCpf() {
         return cpf;
     }
 
