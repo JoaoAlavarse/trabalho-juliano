@@ -34,6 +34,10 @@ public abstract class AbstractConta {
         return senha;
     }
 
+    protected int getAgencia(){
+        return agencia;
+    }
+
     
 
   

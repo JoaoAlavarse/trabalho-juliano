@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class ContaService{
     private PessoaFisicaService pessoaFisicaService = new PessoaFisicaService();
     private HashMap<String, AbstractConta> hashContaPoupanca = new HashMap<String, AbstractConta>();
-    private HashMap<String, AbstractConta> hashContaCorrente = new HashMap<String, AbstractConta>();
+    HashMap<String, AbstractConta> hashContaCorrente = new HashMap<String, AbstractConta>();
     private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     
     public ContaService(PessoaFisicaService pessoaFisicaService) {
@@ -67,7 +67,6 @@ public class ContaService{
             System.out.println("Cpf nao cadastrado, entre novamente com o cpf");
             return verificarPessoaFisica();
         }
-       
     }
 
 
@@ -162,9 +161,9 @@ public class ContaService{
     }
 
     private void efetuarDepositoCorrente() throws IOException {
-        getAgencia();
         AbstractConta conta = verificarContaCorrente();
         AbstractConta contaOrigem = verificarContaOrigem();
+        verificarAgencia(contaOrigem);
         int valor = getValorTransacao();
         if (verificarSenha(contaOrigem)){
             conta.saldo = conta.saldo + valor;
@@ -174,9 +173,9 @@ public class ContaService{
     }
 
     private void efetuarDepositoPoupanca() throws IOException{
-        getAgencia();
         AbstractConta conta = verificarContaPoupanca();
         AbstractConta contaOrigem = verificarContaOrigem();
+        verificarAgencia(contaOrigem);
         int valor = getValorTransacao();
         if (verificarSenha(contaOrigem)){
             conta.saldo = conta.saldo + valor;
@@ -206,9 +205,9 @@ public class ContaService{
     }
 
     private void efetuarSaqueCorrente() throws IOException {
-        getAgencia();
         AbstractConta conta = verificarContaCorrente();
         AbstractConta contaOrigem = verificarContaOrigem();
+        verificarAgencia(contaOrigem);
         int valor = getValorTransacao();
         if (verificarSenha(contaOrigem)){
             if(!verificarSaldo(conta, valor)){
@@ -221,9 +220,9 @@ public class ContaService{
     }
 
     private void efetuarSaquePoupanca() throws NumberFormatException, IOException {
-        getAgencia();
         AbstractConta conta = verificarContaPoupanca();
         AbstractConta contaOrigem = verificarContaOrigem();
+        verificarAgencia(contaOrigem);
         int valor = getValorTransacao();
         if (verificarSenha(contaOrigem)){
             if(!verificarSaldo(conta, valor)){
@@ -276,10 +275,12 @@ public class ContaService{
     }
     
     private void efetuarTransferenciaPoupancaParaPoupanca() throws IOException{
-        getAgencia();
         AbstractConta contaOrigem = verificarContaOrigem();
+        System.out.println("CONTA ORIGEM");
+        verificarAgencia(contaOrigem);
         AbstractConta conta = verificarContaPoupanca();
-        getAgencia();
+        System.out.println("CONTA DESTINO");
+        verificarAgencia(conta);
         int valor = getValorTransacao();
         if (verificarSenha(contaOrigem)){
             if (!verificarSaldo(contaOrigem, valor)){
@@ -291,14 +292,15 @@ public class ContaService{
                 hashContaPoupanca.replace(contaOrigem.getCpf(), contaOrigem);
             }
         }
-
     }
 
     private void efetuarTransferenciaCorrenteParaPoupanca() throws IOException{
-        getAgencia();
         AbstractConta contaOrigem = verificarContaOrigem();
+        System.out.println("CONTA ORIGEM");
+        verificarAgencia(contaOrigem);
         AbstractConta conta = verificarContaPoupanca();
-        getAgencia();
+        System.out.println("CONTA DESTINO");
+        verificarAgencia(conta);
         int valor = getValorTransacao();
         if (verificarSenha(contaOrigem)){
             if (!verificarSaldo(contaOrigem, valor)){
@@ -314,10 +316,12 @@ public class ContaService{
     }
 
     private void efetuarTransferenciaPoupancaParaCorrente() throws IOException{
-        getAgencia();
         AbstractConta contaOrigem = verificarContaOrigem();
+        System.out.println("CONTA ORIGEM");
+        verificarAgencia(contaOrigem);
         AbstractConta conta = verificarContaPoupanca();
-        getAgencia();
+        System.out.println("CONTA DESTINO");
+        verificarAgencia(conta);
         int valor = getValorTransacao();
         if (verificarSenha(contaOrigem)){
             if (!verificarSaldo(contaOrigem, valor)){
@@ -333,10 +337,12 @@ public class ContaService{
     }
 
     private void efetuarTransferenciaCorrenteParaCorrente() throws IOException{
-        getAgencia();
         AbstractConta contaOrigem = verificarContaOrigem();
+        System.out.println("CONTA ORIGEM");
+        verificarAgencia(contaOrigem);
         AbstractConta conta = verificarContaPoupanca();
-        getAgencia();
+        System.out.println("CONTA DESTINO");
+        verificarAgencia(conta);
         int valor = getValorTransacao();
         if (verificarSenha(contaOrigem)){
             if (!verificarSaldo(contaOrigem, valor)){
@@ -348,7 +354,6 @@ public class ContaService{
                 hashContaCorrente.replace(contaOrigem.getCpf(), contaOrigem);
             }
         }
-
     }
 
     private Boolean verificarSenha(AbstractConta conta) throws NumberFormatException, IOException{
@@ -357,6 +362,15 @@ public class ContaService{
             return true;
         } else {
             return false;
+        }
+    }
+
+    private Boolean verificarAgencia(AbstractConta conta) throws NumberFormatException, IOException{
+        if (conta.getAgencia() == getAgencia()){
+            return true;
+        } else {
+            System.out.println("Agencia Invalida");
+            return verificarAgencia(conta);
         }
     }
     
