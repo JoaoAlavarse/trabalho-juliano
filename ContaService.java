@@ -5,29 +5,34 @@ import java.util.HashMap;
 
 public class ContaService{
     private PessoaFisicaService pessoaFisicaService = new PessoaFisicaService();
-    private HashMap<String, AbstractConta> hashConta = new HashMap<String, AbstractConta>();
+    private HashMap<String, AbstractConta> hashContaPoupanca = new HashMap<String, AbstractConta>();
+    private HashMap<String, AbstractConta> hashContaCorrente = new HashMap<String, AbstractConta>();
     private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     
     public ContaService(PessoaFisicaService pessoaFisicaService) {
         this.pessoaFisicaService = pessoaFisicaService;
     }
 
-    public void cadastrarConta(AbstractConta conta) throws Exception{
-        hashConta.put(conta.getCpf(), conta);
+    public void cadastrarContaPoupanca(AbstractConta conta) throws Exception{
+        hashContaPoupanca.put(conta.getCpf(), conta);
+    }
+
+    public void cadastrarContaCorrente(AbstractConta conta) throws Exception{
+        hashContaCorrente.put(conta.getCpf(), conta);
     }
 
     public void cadastrarContaCorrente() throws Exception{
         Integer agencia = getAgencia();
         Integer senha = verificarSenha();
         PessoaFisica pessoaFisica = verificarPessoaFisica();
-        cadastrarConta(new ContaCorrente(agencia, senha, pessoaFisica));
+        cadastrarContaCorrente(new ContaCorrente(agencia, senha, pessoaFisica));
     }
 
     public void cadastrarContaPoupanca() throws Exception{
         Integer agencia = getAgencia();
         Integer senha = verificarSenha();
         PessoaFisica pessoaFisica = verificarPessoaFisica();
-        cadastrarConta(new ContaPoupanca(agencia, senha, pessoaFisica));
+        cadastrarContaPoupanca(new ContaPoupanca(agencia, senha, pessoaFisica));
 
     }
 
@@ -59,12 +64,185 @@ public class ContaService{
         if(pessoaFisicaService.hashPf.containsKey(cpf) == true){
             return pessoaFisicaService.obterPorCpf(cpf);
         } else{
-            System.out.println("Cpf nao cadastrado");
+            System.out.println("Cpf nao cadastrado, entre novamente com o cpf");
             return verificarPessoaFisica();
         }
        
     }
 
 
+    private AbstractConta verificarContaPoupanca() throws IOException{
+        System.out.println("Entre com o cpf do dono da conta");
+        String cpf = reader.readLine();
+        if(hashContaPoupanca.containsKey(cpf) == true){
+            return hashContaPoupanca.get(cpf);
+        } else{
+            System.out.println("Cpf nao cadastrado, entre novamente com o cpf");
+            return verificarContaPoupanca();
+        }
+    }
+
+    private AbstractConta verificarContaCorrente() throws IOException{
+        System.out.println("Entre com o cpf do dono da conta");
+        String cpf = reader.readLine();
+        if(hashContaCorrente.containsKey(cpf) == true){
+            return hashContaCorrente.get(cpf);
+        } else{
+            System.out.println("Cpf nao cadastrado, entre novamente com o cpf");
+            return verificarContaCorrente();
+        }
+    }
+
+    public void efetuarDeposito() throws NumberFormatException, IOException{
+        System.out.println("Deseja efetuar o deposito em uma conta CORRENTE ou POUPANCA?");
+        System.out.println("1 - POUPANCA");
+        System.out.println("2 - CORRENTE");
+        int opcao = Integer.parseInt(reader.readLine());
+        switch (opcao){
+            case 1:
+                efetuarDepositoPoupanca();
+            break;
+
+            case 2:
+                efetuarDepositoCorrente();
+            break;
+
+            default:
+                System.out.println("Opcao invalida. Selecione novamente");
+                efetuarDeposito();
+            break;
+        }
+    }
+
+    private AbstractConta verificarContaOrigem() throws IOException{
+        AbstractConta conta;
+        System.out.println("A conta de origem é POUPANCA ou CORRENTE?");
+        System.out.println("1 - POUPANCA");
+        System.out.println("2 - CORRENTE");
+        int opcao = Integer.parseInt(reader.readLine());
+        switch (opcao){
+            case 1:
+                conta = verificarContaPoupanca();
+                if (conta != null){
+                    return conta;
+                } else {
+                    System.out.println("Conta nao encontrada");
+                    return verificarContaOrigem();
+                }
+
+            case 2:
+                conta = verificarContaCorrente();
+                if (conta != null){
+                    return conta;
+                } else {
+                    System.out.println("Conta nao encontrada");
+                    return verificarContaOrigem();
+                }
+
+            default:
+                System.out.println("Opcao invalida. Selecione novamente");
+                return verificarContaOrigem();
+        }
+    }
+
+
+    private int getValorTransacao() throws NumberFormatException, IOException{
+        System.out.println("Insira o valor inteiro desjado");
+        String teste = reader.readLine();
+        if (!teste.matches("[0-9]+")){
+            System.out.println("Invalido. Nao pode inserir letras");
+            return getValorTransacao();
+        } else if (Integer.parseInt(teste) <= 0){
+            System.out.println("Valor nao pode ser igual ou menor a 0");
+            return getValorTransacao();
+        } else{
+            int valor = Integer.parseInt(teste);
+            return valor;
+        }
+    }
+
+    private void efetuarDepositoCorrente() throws IOException {
+        getAgencia();
+        AbstractConta conta = verificarContaCorrente();
+        AbstractConta contaOrigem = verificarContaOrigem();
+        int valor = getValorTransacao();
+        System.out.println("Insira a senha");
+        if (contaOrigem.getSenha() == Integer.parseInt(reader.readLine())){
+            conta.saldo = conta.saldo + valor;
+            hashContaCorrente.replace(conta.getCpf(), conta);
+        }
+
+    }
+
+    private void efetuarDepositoPoupanca() throws IOException{
+        getAgencia();
+        AbstractConta conta = verificarContaPoupanca();
+        AbstractConta contaOrigem = verificarContaOrigem();
+        int valor = getValorTransacao();
+        System.out.println("Insira a senha");
+        if (contaOrigem.getSenha() == Integer.parseInt(reader.readLine())){
+            conta.saldo = conta.saldo + valor;
+            hashContaPoupanca.replace(conta.getCpf(), conta);
+        }
+    }
+
+    public void efetuarSaque() throws NumberFormatException, IOException{
+        System.out.println("Deseja efetuar o saque em uma conta CORRENTE ou POUPANCA?");
+        System.out.println("1 - POUPANCA");
+        System.out.println("2 - CORRENTE");
+        int opcao = Integer.parseInt(reader.readLine());
+        switch (opcao){
+            case 1:
+                efetuarSaquePoupanca();
+            break;
+
+            case 2:
+                efetuarSaqueCorrente();
+            break;
+
+            default:
+                System.out.println("Opcao invalida. Selecione novamente");
+                efetuarSaque();
+            break;
+        }
+    }
+
+    private void efetuarSaqueCorrente() throws IOException {
+        getAgencia();
+        AbstractConta conta = verificarContaCorrente();
+        AbstractConta contaOrigem = verificarContaOrigem();
+        int valor = getValorTransacao();
+        if (contaOrigem.getSenha() == Integer.parseInt(reader.readLine())){
+            if(conta.saldo - valor < 0){
+                System.out.println("Saque nao pode ser concluido. Saldo insuficiente");
+            } else {
+                conta.saldo = conta.saldo - valor;
+                hashContaCorrente.replace(conta.getCpf(), conta);
+            }
+        }
+    }
+
+    private void efetuarSaquePoupanca() throws NumberFormatException, IOException {
+        getAgencia();
+        AbstractConta conta = verificarContaPoupanca();
+        AbstractConta contaOrigem = verificarContaOrigem();
+        int valor = getValorTransacao();
+        if (contaOrigem.getSenha() == Integer.parseInt(reader.readLine())){
+            if(conta.saldo - valor < 0){
+                System.out.println("Saque nao pode ser concluido. Saldo insuficiente");
+            } else {
+                conta.saldo = conta.saldo - valor;
+                hashContaPoupanca.replace(conta.getCpf(), conta);
+            }
+        }
+    }
+
+    
+
+    
+    
+
+
+    
 
 }

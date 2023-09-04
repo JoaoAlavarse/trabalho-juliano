@@ -41,11 +41,11 @@ public class Main {
                 break;
 
                 case 4:
-                
+                    contaService.efetuarSaque();
                 break;
-
+                    
                 case 5:
-
+                    contaService.efetuarDeposito();
                 break;
 
                 case 6:

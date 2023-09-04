@@ -5,6 +5,7 @@ public abstract class AbstractConta {
     private int senha;
     private PessoaFisica pessoaFisica;
     private int numeroConta;
+    protected float saldo;
     protected Random numeroAleatorio = new Random();
 
     protected AbstractConta(int agencia, int senha, PessoaFisica pessoaFisica) {
@@ -29,7 +30,9 @@ public abstract class AbstractConta {
         return teste;
     }
 
-
+    protected int getSenha(){
+        return senha;
+    }
 
     
 
