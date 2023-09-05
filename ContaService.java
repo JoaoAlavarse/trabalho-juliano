@@ -282,16 +282,18 @@ public class ContaService{
         System.out.println("CONTA DESTINO");
         verificarAgencia(conta);
         int valor = getValorTransacao();
-        if (verificarSenha(contaOrigem)){
-            if (!verificarSaldo(contaOrigem, valor)){
-                System.out.println("Transferencia nao pode ser concluido. Saldo insuficiente");
-            } else {
+        if (!verificarSenha(contaOrigem)){
+            System.out.println("Senha invalida");
+            return;
+        }
+        if (!verificarSaldo(contaOrigem, valor)){
+            System.out.println("Transferencia nao pode ser concluido. Saldo insuficiente");
+            return;    
+        } 
                 contaOrigem.saldo = conta.saldo - valor;
                 conta.saldo = conta.saldo + valor;
                 hashContaPoupanca.replace(conta.getCpf(), conta);
-                hashContaPoupanca.replace(contaOrigem.getCpf(), contaOrigem);
-            }
-        }
+                hashContaPoupanca.replace(contaOrigem.getCpf(), contaOrigem);     
     }
 
     private void efetuarTransferenciaCorrenteParaPoupanca() throws IOException{
@@ -302,16 +304,18 @@ public class ContaService{
         System.out.println("CONTA DESTINO");
         verificarAgencia(conta);
         int valor = getValorTransacao();
-        if (verificarSenha(contaOrigem)){
-            if (!verificarSaldo(contaOrigem, valor)){
-                System.out.println("Transferencia nao pode ser concluido. Saldo insuficiente");
-            } else {
-                contaOrigem.saldo = conta.saldo - valor;
-                conta.saldo = conta.saldo + valor;
-                hashContaPoupanca.replace(conta.getCpf(), conta);
-                hashContaCorrente.replace(contaOrigem.getCpf(), contaOrigem);
-            }
+        if (!verificarSenha(contaOrigem)){
+            System.out.println("Senha invalida");
+            return;
         }
+        if (!verificarSaldo(contaOrigem, valor)){
+            System.out.println("Transferencia nao pode ser concluido. Saldo insuficiente");
+            return;    
+        } 
+        contaOrigem.saldo = conta.saldo - valor;
+        conta.saldo = conta.saldo + valor;
+        hashContaPoupanca.replace(conta.getCpf(), conta);
+        hashContaCorrente.replace(contaOrigem.getCpf(), contaOrigem);
 
     }
 
@@ -323,18 +327,20 @@ public class ContaService{
         System.out.println("CONTA DESTINO");
         verificarAgencia(conta);
         int valor = getValorTransacao();
-        if (verificarSenha(contaOrigem)){
-            if (!verificarSaldo(contaOrigem, valor)){
-                System.out.println("Transferencia nao pode ser concluido. Saldo insuficiente");
-            } else {
-                contaOrigem.saldo = conta.saldo - valor;
-                conta.saldo = conta.saldo + valor;
-                hashContaCorrente.replace(conta.getCpf(), conta);
-                hashContaPoupanca.replace(contaOrigem.getCpf(), contaOrigem);
-            }
+        if (!verificarSenha(contaOrigem)){
+            System.out.println("Senha invalida");
+            return;
         }
-
+        if (!verificarSaldo(contaOrigem, valor)){
+            System.out.println("Transferencia nao pode ser concluido. Saldo insuficiente");
+            return;    
+        } 
+        contaOrigem.saldo = conta.saldo - valor;
+        conta.saldo = conta.saldo + valor;
+        hashContaCorrente.replace(conta.getCpf(), conta);
+        hashContaPoupanca.replace(contaOrigem.getCpf(), contaOrigem);
     }
+
 
     private void efetuarTransferenciaCorrenteParaCorrente() throws IOException{
         AbstractConta contaOrigem = verificarContaOrigem();
@@ -344,16 +350,20 @@ public class ContaService{
         System.out.println("CONTA DESTINO");
         verificarAgencia(conta);
         int valor = getValorTransacao();
-        if (verificarSenha(contaOrigem)){
-            if (!verificarSaldo(contaOrigem, valor)){
-                System.out.println("Transferencia nao pode ser concluido. Saldo insuficiente");
-            } else {
-                contaOrigem.saldo = conta.saldo - valor;
-                conta.saldo = conta.saldo + valor;
-                hashContaCorrente.replace(conta.getCpf(), conta);
-                hashContaCorrente.replace(contaOrigem.getCpf(), contaOrigem);
-            }
+        if (!verificarSenha(contaOrigem)){
+            System.out.println("Senha invalida");
+            return;
         }
+        if (!verificarSaldo(contaOrigem, valor)){
+            System.out.println("Transferencia nao pode ser concluido. Saldo insuficiente");
+            return;    
+        }        
+        contaOrigem.saldo = conta.saldo - valor;
+        conta.saldo = conta.saldo + valor;
+        hashContaCorrente.replace(conta.getCpf(), conta);
+        hashContaCorrente.replace(contaOrigem.getCpf(), contaOrigem);
+            
+        
     }
 
     private Boolean verificarSenha(AbstractConta conta) throws NumberFormatException, IOException{
@@ -374,5 +384,4 @@ public class ContaService{
         }
     }
     
-
 }
