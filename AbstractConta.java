@@ -12,7 +12,7 @@ public abstract class AbstractConta {
         this.agencia = agencia;
         this.senha = senha;
         this.pessoaFisica = pessoaFisica;
-
+        this.saldo = 0;
         this.numeroConta = setNumeroConta(numeroAleatorio);
     }
     
