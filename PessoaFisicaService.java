@@ -11,6 +11,10 @@ public class PessoaFisicaService {
     public void cadastrar() throws IOException{
         System.out.println("Digite o seu cpf: ");
         String cpf = reader.readLine();
+        if (hashPf.containsKey(cpf)){
+            System.out.println("Nao pode existir o mesmo cpf para duas pessoas");
+            return;
+        }
         System.out.println("Digite seu nome");
         String nome = reader.readLine();
 
