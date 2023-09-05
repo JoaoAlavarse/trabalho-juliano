@@ -14,17 +14,25 @@ public class ContaService{
     }
 
     public void cadastrarContaPoupanca(AbstractConta conta) throws Exception{
+        if (hashContaPoupanca.containsKey(conta.getCpf())){
+            System.out.println("Nao pode exister mais de uma conta poupanca com o mesmo cpf");
+            return;
+        }
         hashContaPoupanca.put(conta.getCpf(), conta);
     }
 
     public void cadastrarContaCorrente(AbstractConta conta) throws Exception{
+        if (hashContaCorrente.containsKey(conta.getCpf())){
+            System.out.println("Nao pode exister mais de uma conta corrente com o mesmo cpf");
+            return;
+        }
         hashContaCorrente.put(conta.getCpf(), conta);
     }
 
     public void cadastrarContaCorrente() throws Exception{
+        PessoaFisica pessoaFisica = verificarPessoaFisica();
         Integer agencia = getAgencia();
         Integer senha = verificarSenha();
-        PessoaFisica pessoaFisica = verificarPessoaFisica();
         cadastrarContaCorrente(new ContaCorrente(agencia, senha, pessoaFisica));
     }
 
@@ -275,8 +283,8 @@ public class ContaService{
     }
     
     private void efetuarTransferenciaPoupancaParaPoupanca() throws IOException{
-        AbstractConta contaOrigem = verificarContaOrigem();
         System.out.println("CONTA ORIGEM");
+        AbstractConta contaOrigem = verificarContaPoupanca();
         verificarAgencia(contaOrigem);
         AbstractConta conta = verificarContaPoupanca();
         System.out.println("CONTA DESTINO");
@@ -297,7 +305,7 @@ public class ContaService{
     }
 
     private void efetuarTransferenciaCorrenteParaPoupanca() throws IOException{
-        AbstractConta contaOrigem = verificarContaOrigem();
+        AbstractConta contaOrigem = verificarContaCorrente();
         System.out.println("CONTA ORIGEM");
         verificarAgencia(contaOrigem);
         AbstractConta conta = verificarContaPoupanca();
@@ -320,10 +328,10 @@ public class ContaService{
     }
 
     private void efetuarTransferenciaPoupancaParaCorrente() throws IOException{
-        AbstractConta contaOrigem = verificarContaOrigem();
         System.out.println("CONTA ORIGEM");
+        AbstractConta contaOrigem = verificarContaPoupanca();
         verificarAgencia(contaOrigem);
-        AbstractConta conta = verificarContaPoupanca();
+        AbstractConta conta = verificarContaCorrente();
         System.out.println("CONTA DESTINO");
         verificarAgencia(conta);
         int valor = getValorTransacao();
@@ -343,10 +351,10 @@ public class ContaService{
 
 
     private void efetuarTransferenciaCorrenteParaCorrente() throws IOException{
-        AbstractConta contaOrigem = verificarContaOrigem();
+        AbstractConta contaOrigem = verificarContaCorrente();
         System.out.println("CONTA ORIGEM");
         verificarAgencia(contaOrigem);
-        AbstractConta conta = verificarContaPoupanca();
+        AbstractConta conta = verificarContaCorrente();
         System.out.println("CONTA DESTINO");
         verificarAgencia(conta);
         int valor = getValorTransacao();
