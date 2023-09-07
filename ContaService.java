@@ -305,8 +305,8 @@ public class ContaService{
     }
 
     private void efetuarTransferenciaCorrenteParaPoupanca() throws IOException{
-        AbstractConta contaOrigem = verificarContaCorrente();
         System.out.println("CONTA ORIGEM");
+        AbstractConta contaOrigem = verificarContaCorrente();
         verificarAgencia(contaOrigem);
         AbstractConta conta = verificarContaPoupanca();
         System.out.println("CONTA DESTINO");
@@ -331,8 +331,8 @@ public class ContaService{
         System.out.println("CONTA ORIGEM");
         AbstractConta contaOrigem = verificarContaPoupanca();
         verificarAgencia(contaOrigem);
-        AbstractConta conta = verificarContaCorrente();
         System.out.println("CONTA DESTINO");
+        AbstractConta conta = verificarContaCorrente();
         verificarAgencia(conta);
         int valor = getValorTransacao();
         if (!verificarSenha(contaOrigem)){
@@ -351,8 +351,8 @@ public class ContaService{
 
 
     private void efetuarTransferenciaCorrenteParaCorrente() throws IOException{
-        AbstractConta contaOrigem = verificarContaCorrente();
         System.out.println("CONTA ORIGEM");
+        AbstractConta contaOrigem = verificarContaCorrente();
         verificarAgencia(contaOrigem);
         AbstractConta conta = verificarContaCorrente();
         System.out.println("CONTA DESTINO");
